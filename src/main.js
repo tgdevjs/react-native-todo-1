@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, TextInput, View, TouchableOpacity, } from 'react-native';
+import {StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView,} from 'react-native';
 
 module.exports = React.createClass({
   getInitialState() {
@@ -14,14 +14,17 @@ module.exports = React.createClass({
     this.setState({tasks});
   },
   completeTask(index) {
-    console.log('completeTask: ', index);
     let tasks = this.state.tasks;
     tasks = tasks.slice(0,index).concat(tasks.slice(index+1));
 
     let completedTasks = this.state.completedTasks;
     completedTasks = completedTasks.concat([this.state.tasks[index]]);
     this.setState({tasks, completedTasks});
-    console.log('completedTasks: ',completedTasks);
+  },
+  deleteTask(index) {
+    let completedTasks = this.state.completedTasks;
+    completedTasks = completedTasks.slice(0,index).concat(completedTasks.slice(index+1));
+    this.setState({completedTasks});
   },
   renderList(tasks){
     return tasks.map( (task, index) => {
@@ -46,6 +49,11 @@ module.exports = React.createClass({
           <Text style={styles.completed}>
             {task}
           </Text>
+          <TouchableOpacity onPress={()=>this.deleteTask(index)}>
+            <Text>
+              &#10005;
+            </Text>
+          </TouchableOpacity>
         </View>
       )
     });
@@ -64,8 +72,10 @@ module.exports = React.createClass({
           }}
           onEndEditing={()=>{this.addTask()}}
         />
-        {this.renderList(this.state.tasks)}
-        {this.renderCompleted(this.state.completedTasks)}
+        <ScrollView>
+          {this.renderList(this.state.tasks)}
+          {this.renderCompleted(this.state.completedTasks)}
+        </ScrollView>
       </View>
     )
   }
