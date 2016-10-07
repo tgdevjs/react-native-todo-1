@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, TextInput, View, } from 'react-native';
+import {StyleSheet, Text, TextInput, View, TouchableOpacity, } from 'react-native';
 
 module.exports = React.createClass({
   getInitialState() {
@@ -11,16 +11,25 @@ module.exports = React.createClass({
   addTask() {
     let tasks = this.state.tasks.concat([this.state.task]);
     this.setState({tasks});
-    console.log('AddTask: ',this.state.task);
-    console.log('  Tasks: ',this.state.tasks);
+  },
+  completeTask(index) {
+    console.log('completeTask: ', index);
+    let tasks = this.state.tasks;
+    tasks = tasks.slice(0,index).concat(tasks.slice(index+1));
+    this.setState({tasks});
   },
   renderList(tasks){
-    return tasks.map( (task) => {
+    return tasks.map( (task, index) => {
       return (
         <View key={task} style={styles.task}>
           <Text>
             {task}
           </Text>
+          <TouchableOpacity onPress={()=>this.completeTask(index)}>
+            <Text>
+              &#10003;
+            </Text>
+          </TouchableOpacity>
         </View>
       );
     })
