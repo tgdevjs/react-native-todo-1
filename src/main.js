@@ -28,10 +28,12 @@ module.exports = React.createClass({
       });
 
   },
+  componentDidUpdate() {
+    this.setStorage();
+  },
   addTask() {
     let tasks = this.state.tasks.concat([this.state.task]);
     this.setState({tasks});
-    this.setStorage();
   },
   completeTask(index) {
     let tasks = this.state.tasks;
@@ -40,13 +42,11 @@ module.exports = React.createClass({
     let completedTasks = this.state.completedTasks;
     completedTasks = completedTasks.concat([this.state.tasks[index]]);
     this.setState({tasks, completedTasks});
-    this.setStorage();
   },
   deleteTask(index) {
     let completedTasks = this.state.completedTasks;
     completedTasks = completedTasks.slice(0,index).concat(completedTasks.slice(index+1));
     this.setState({completedTasks});
-    this.setStorage();
   },
   setStorage() {
     AsyncStorage.setItem('tasks', JSON.stringify(this.state.tasks));
